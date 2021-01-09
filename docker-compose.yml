@@ -1,0 +1,17 @@
+version: '3'
+services:
+  db:
+    image: postgres
+    volumes:
+      - ./tmp/db:/var/lib/postgresql/data
+    environment:
+      - POSTGRES_PASSWORD=password
+  web:
+    build: .
+    command: bash -c "yarn install && rm -f tmp/pids/server.pid && bundle install && bundle exec rails s -p 3002 -b '0.0.0.0'"
+    volumes:
+      - .:/self_analytics
+    ports:
+      - "3002:3002"
+    depends_on:
+      - db
