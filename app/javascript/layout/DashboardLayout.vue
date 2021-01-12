@@ -1,10 +1,10 @@
 <template>
   <div class="wrapper" :class="{ 'nav-open': $sidebar.showSidebar }">
-    <side-bar
+    <!-- <side-bar
       :background-color="sidebarBackground"
       short-title="Argon"
       title="Argon"
-    >
+    > -->
       <template slot="links">
         <sidebar-item
           :link="{

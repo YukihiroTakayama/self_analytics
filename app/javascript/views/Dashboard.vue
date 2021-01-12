@@ -66,7 +66,7 @@
         <!--Charts-->
         <div class="container-fluid mt--7">
             <div class="row">
-                <div class="col-xl-8 mb-5 mb-xl-0">
+                <div class="col-xl-12 mb-5 mb-xl-0">
                     <card type="default" header-classes="bg-transparent">
                         <div slot="header" class="row align-items-center">
                             <div class="col">
@@ -80,8 +80,8 @@
                                            href="#"
                                            :class="{active: bigLineChart.activeIndex === 0}"
                                            @click.prevent="initBigChart(0)">
-                                            <span class="d-none d-md-block">Month</span>
-                                            <span class="d-md-none">M</span>
+                                            <span class="d-none d-md-block">Day</span>
+                                            <span class="d-md-none">D</span>
                                         </a>
                                     </li>
                                     <li class="nav-item">
@@ -91,6 +91,15 @@
                                            @click.prevent="initBigChart(1)">
                                             <span class="d-none d-md-block">Week</span>
                                             <span class="d-md-none">W</span>
+                                        </a>
+                                    </li>
+                                    <li class="nav-item">
+                                        <a class="nav-link py-2 px-3"
+                                           href="#"
+                                           :class="{active: bigLineChart.activeIndex === 2}"
+                                           @click.prevent="initBigChart(2)">
+                                            <span class="d-none d-md-block">Month</span>
+                                            <span class="d-md-none">M</span>
                                         </a>
                                     </li>
                                 </ul>
@@ -107,7 +116,7 @@
                     </card>
                 </div>
 
-                <div class="col-xl-4">
+                <!-- <div class="col-xl-4">
                     <card header-classes="bg-transparent">
                         <div slot="header" class="row align-items-center">
                             <div class="col">
@@ -123,7 +132,7 @@
                         >
                         </bar-chart>
                     </card>
-                </div>
+                </div> -->
             </div>
             <!-- End charts-->
 
@@ -150,6 +159,8 @@
   // Tables
   import SocialTrafficTable from './Dashboard/SocialTrafficTable';
   import PageVisitsTable from './Dashboard/PageVisitsTable';
+
+  import axios from 'axios';
 
   export default {
     components: {
@@ -185,17 +196,17 @@
     },
     methods: {
       initBigChart(index) {
-        let chartData = {
-          datasets: [
-            {
-              label: 'Performance',
-              data: this.bigLineChart.allData[index]
+        axios
+          .get('/api/v1/charts', {
+            params: {
+              x_axis: index
             }
-          ],
-          labels: ['May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'],
-        };
-        this.bigLineChart.chartData = chartData;
-        this.bigLineChart.activeIndex = index;
+          })
+          .then(response => {
+            console.log(response.data.line_chart)
+            this.bigLineChart.chartData = response.data.line_chart;
+            this.bigLineChart.activeIndex = index;
+          })
       }
     },
     mounted() {
