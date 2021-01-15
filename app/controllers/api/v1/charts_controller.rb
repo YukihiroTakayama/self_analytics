@@ -1,12 +1,14 @@
 class Api::V1::ChartsController < ApiController
   def index
-    params[:type] ||= '0'
     @current_date = Date.today
+    params[:type] ||= '0'
+    params[:year] ||= @current_date.year
+    params[:month] ||= @current_date.month
+    @target_period = Period.find_by(year: params[:year], month: params[:month])
     @labels = labels
     @datasets = datasets
     @months = months
     @years = years
-    @periods = Period.where(year: params[:year])
   end
 
   private
@@ -67,7 +69,7 @@ class Api::V1::ChartsController < ApiController
       data_list = []
       klasses.each do |klass|
         data = date_ranges.map do |range|
-          aggregate_data = klass.where(calculating_target_flag: true)
+          aggregate_data = klass.calculating_target
                                 .where("#{klass.to_s.downcase}_date".to_sym => range)
 
           aggregate_data = aggregate_data.group((params[:category_size] || 'large') + '_category_id') unless params[:type] == '0'
@@ -79,7 +81,7 @@ class Api::V1::ChartsController < ApiController
     else
       klasses.each do |klass|
         data_list = date_ranges.map do |range|
-          klass.where(calculating_target_flag: true)
+          klass.calculating_target
                .where("#{klass.to_s.downcase}_date".to_sym => range)
                .group((params[:category_size] || 'large') + '_category_id')
                .sum(:price)
@@ -90,24 +92,19 @@ class Api::V1::ChartsController < ApiController
   end
 
   def date_ranges
-    target_period = Period.find_by(
-      year: (params[:year] || @current_date.year).to_i,
-      month: (params[:month] || @current_date.month).to_i
-    )
-
     case params[:x_axis]
     when '0'
-      (target_period.beginning_date..target_period.end_date).map do |date|
-        (target_period.beginning_date..date)
+      (@target_period.beginning_date..@target_period.end_date).map do |date|
+        (@target_period.beginning_date..date)
       end
     when '1'
       date_ranges = []
       i = 0
-      while (target_period.beginning_date.end_of_week + i) < (target_period.end_date - 1) do
-        date_ranges.push(target_period.beginning_date..(target_period.beginning_date.end_of_week + i))
+      while (@target_period.beginning_date.end_of_week + i) < (@target_period.end_date - 1) do
+        date_ranges.push(@target_period.beginning_date..(@target_period.beginning_date.end_of_week + i))
         i += 7
       end
-      date_ranges.push(target_period.beginning_date..target_period.end_date)
+      date_ranges.push(@target_period.beginning_date..@target_period.end_date)
       date_ranges
     when '2'
       params[:year] ||= @current_date.year

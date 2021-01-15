@@ -4,9 +4,9 @@
             <!-- Card stats -->
             <div class="row">
                 <div class="col-xl-3 col-lg-6">
-                    <stats-card title="Total traffic"
+                    <stats-card title="balance"
                                 type="gradient-red"
-                                sub-title="350,897"
+                                :sub-title="balance | yen"
                                 icon="ni ni-active-40"
                                 class="mb-4 mb-xl-0"
                     >
@@ -18,9 +18,9 @@
                     </stats-card>
                 </div>
                 <div class="col-xl-3 col-lg-6">
-                    <stats-card title="Total traffic"
+                    <stats-card title="income"
                                 type="gradient-orange"
-                                sub-title="2,356"
+                                :sub-title="total_income | yen"
                                 icon="ni ni-chart-pie-35"
                                 class="mb-4 mb-xl-0"
                     >
@@ -32,9 +32,9 @@
                     </stats-card>
                 </div>
                 <div class="col-xl-3 col-lg-6">
-                    <stats-card title="Sales"
+                    <stats-card title="expense"
                                 type="gradient-green"
-                                sub-title="924"
+                                :sub-title="total_expense | yen"
                                 icon="ni ni-money-coins"
                                 class="mb-4 mb-xl-0"
                     >
@@ -76,28 +76,54 @@
                             <div class="col">
                                 <ul class="nav nav-pills justify-content-end">
                                     <li class="nav-item mr-2 mr-md-0">
-                                        <a class="nav-link py-2 px-3"
-                                           href="#"
+                                        <div class="nav-link py-2 px-3">
+                                            <span class="d-none d-md-block">
+                                              <i class="ni ni-bold-left" @click.prevent="prevYear()"></i>
+                                              {{ current_month | year }}
+                                              <i class="ni ni-bold-right" @click.prevent="nextYear()"></i>
+                                            </span>
+                                            <span class="d-md-none">
+                                              <i class="ni ni-bold-left" @click.prevent="prevYear()"></i>
+                                              {{ current_month | year }}
+                                              <i class="ni ni-bold-right" @click.prevent="nextYear()"></i>
+                                            </span>
+                                        </div>
+                                    </li>
+                                    <li class="nav-item mr-2 mr-md-0">
+                                        <a class="nav-link py-2 px-3">
+                                            <span class="d-none d-md-block">
+                                              <i class="ni ni-bold-left" @click.prevent="prevMonth()"></i>
+                                              {{ current_month | month }}
+                                              <i class="ni ni-bold-right" @click.prevent="nextMonth()"></i>
+                                            </span>
+                                            <span class="d-md-none">
+                                              <i class="ni ni-bold-left" @click.prevent="prevMonth()"></i>
+                                              {{ current_month | month }}
+                                              <i class="ni ni-bold-right" @click.prevent="nextMonth()"></i>
+                                            </span>
+                                        </a>
+                                    </li>
+                                    <li class="nav-item mr-2 mr-md-0">
+                                        <a class="nav-link py-2 px-3 btn"
                                            :class="{active: bigLineChart.activeIndex === 0}"
-                                           @click.prevent="initBigChart(0)">
+                                           @click.prevent="setChart(0)">
                                             <span class="d-none d-md-block">Day</span>
                                             <span class="d-md-none">D</span>
                                         </a>
                                     </li>
                                     <li class="nav-item">
-                                        <a class="nav-link py-2 px-3"
-                                           href="#"
+                                        <a class="nav-link py-2 px-3 btn"
                                            :class="{active: bigLineChart.activeIndex === 1}"
-                                           @click.prevent="initBigChart(1)">
+                                           @click.prevent="setChart(1)">
                                             <span class="d-none d-md-block">Week</span>
                                             <span class="d-md-none">W</span>
                                         </a>
                                     </li>
                                     <li class="nav-item">
-                                        <a class="nav-link py-2 px-3"
+                                        <a class="nav-link py-2 px-3 btn"
                                            href="#"
                                            :class="{active: bigLineChart.activeIndex === 2}"
-                                           @click.prevent="initBigChart(2)">
+                                           @click.prevent="setChart(2)">
                                             <span class="d-none d-md-block">Month</span>
                                             <span class="d-md-none">M</span>
                                         </a>
@@ -161,6 +187,7 @@
   import PageVisitsTable from './Dashboard/PageVisitsTable';
 
   import axios from 'axios';
+  import moment from "moment";
 
   export default {
     components: {
@@ -183,34 +210,69 @@
           },
           extraOptions: chartConfigs.blueChartOptions,
         },
-        redBarChart: {
-          chartData: {
-            labels: ['Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'],
-            datasets: [{
-              label: 'Sales',
-              data: [25, 20, 30, 22, 17, 29]
-            }]
-          }
-        }
+        current_month: new Date(),
+        balance: 0,
+        total_income: 0,
+        total_expense: 0,
       };
     },
     methods: {
-      initBigChart(index) {
+      setChart(index) {
+        let year = this.current_month.getFullYear()
+        let month = this.current_month.getMonth() + 1
+
         axios
           .get('/api/v1/charts', {
             params: {
-              x_axis: index
+              x_axis: index,
+              year: year,
+              month: month
             }
           })
           .then(response => {
-            console.log(response.data.line_chart)
-            this.bigLineChart.chartData = response.data.line_chart;
+            let data = response.data
+            this.bigLineChart.chartData = data.line_chart;
             this.bigLineChart.activeIndex = index;
+            this.current_month = new Date(data.year, data.month - 1)
+            this.balance = data.balance
+            this.total_income = data.total_income
+            this.total_expense = data.total_expense * -1
           })
+      },
+      nextYear() {
+        this.current_month.setYear(this.current_month.getFullYear() + 1);
+        this.setChart(this.bigLineChart.activeIndex)
+      },
+      prevYear() {
+        this.current_month.setYear(this.current_month.getFullYear() - 1);
+        this.setChart(this.bigLineChart.activeIndex)
+      },
+      nextMonth() {
+        this.current_month.setMonth(this.current_month.getMonth() + 1);
+        this.setChart(this.bigLineChart.activeIndex)
+      },
+      prevMonth() {
+        this.current_month.setMonth(this.current_month.getMonth() - 1);
+        this.setChart(this.bigLineChart.activeIndex)
       }
     },
     mounted() {
-      this.initBigChart(0);
+      this.setChart(0);
+    },
+    filters: {
+      month: function (date) {
+        return moment(date).format('M月');
+      },
+      year: function (date) {
+        return moment(date).format('YYYY年');
+      },
+      yen: function (number) {
+        if (Math.sign(number) === 1) {
+          return '+' + number.toLocaleString()
+        } else {
+          return number.toLocaleString()
+        }
+      }
     }
   };
 </script>

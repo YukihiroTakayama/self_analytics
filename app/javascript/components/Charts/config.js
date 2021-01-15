@@ -57,7 +57,6 @@ function chartOptions(Chart) {
         },
         elements: {
           point: {
-            radius: 0,
             backgroundColor: colors.theme['primary']
           },
           line: {

@@ -4,7 +4,7 @@ namespace :line_bot do
 
     current_year = Time.now.year
     current_month = Time.now.month
-    expenses = Period.find_by(year: current_year, month: current_month).expenses
+    expenses = Period.find_by(year: current_year, month: current_month).expenses.calculating_target
 
     aggregate_expenses = expenses.group(:large_category_id).sum(:price)
 

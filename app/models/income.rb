@@ -4,6 +4,8 @@ class Income < ApplicationRecord
   # has_one :large_category
   # has_one :medium_category
 
+  scope :calculating_target, -> { where(calculating_target_flag: true) }
+
   class << self
     def import!(file, period_id)
       CSV.foreach(file.path, headers: true, encoding: 'Windows-31J:UTF-8') do |row|
