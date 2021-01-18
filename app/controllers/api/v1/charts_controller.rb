@@ -9,6 +9,8 @@ class Api::V1::ChartsController < ApiController
     @datasets = datasets
     @months = months
     @years = years
+    @pie_chart_data = pie_chart_data
+    @amount = amount
   end
 
   private
@@ -70,7 +72,7 @@ class Api::V1::ChartsController < ApiController
       klasses.each do |klass|
         data = date_ranges.map do |range|
           aggregate_data = klass.calculating_target
-                                .where("#{klass.to_s.downcase}_date".to_sym => range)
+                                .where(:transaction_date => range)
 
           aggregate_data = aggregate_data.group((params[:category_size] || 'large') + '_category_id') unless params[:type] == '0'
           aggregate_data.sum(:price)
@@ -82,7 +84,7 @@ class Api::V1::ChartsController < ApiController
       klasses.each do |klass|
         data_list = date_ranges.map do |range|
           klass.calculating_target
-               .where("#{klass.to_s.downcase}_date".to_sym => range)
+               .where(:transaction_date => range)
                .group((params[:category_size] || 'large') + '_category_id')
                .sum(:price)
         end
@@ -133,10 +135,34 @@ class Api::V1::ChartsController < ApiController
   end
 
   def years
-    years = Expense.pluck(Arel.sql("date_part('year', expense_date)")) + Income.pluck(Arel.sql("date_part('year', income_date)"))
+    years = Expense.pluck(Arel.sql("date_part('year', transaction_date)")) + Income.pluck(Arel.sql("date_part('year', transaction_date)"))
     years.uniq!
     years ||= []
     years.sort_by! { |year| year }
     years.map { |year| ["#{year.to_i}年", year.to_i] }.to_h
+  end
+
+  def pie_chart_data
+    total_expense_price = @target_period.expenses.sum(:price)
+    large_category_price_list = @target_period.expenses.group(:large_category_id).sum(:price)
+    categories = Category.where(id: large_category_price_list.keys)
+    labels = categories.pluck(:name)
+    colors = categories.pluck(:color)
+    {
+      datasets: [{
+        data: large_category_price_list.values,
+        backgroundColor: colors
+      }],
+      labels: labels
+    }
+  end
+
+  def amount
+    return 0 if params[:month] == '1'
+    target_date = Date.new(params[:year].to_i, params[:month].to_i)
+    prev_month = target_date.prev_month.month
+    expenses = Expense.joins(:period).calculating_target.where(periods: { year: params[:year], month: (1..prev_month) }).sum(:price)
+    incomes = Income.joins(:period).calculating_target.where(periods: { year: params[:year], month: (1..prev_month) }).sum(:price)
+    incomes - expenses
   end
 end

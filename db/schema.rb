@@ -26,7 +26,7 @@ ActiveRecord::Schema.define(version: 2021_01_10_102126) do
 
   create_table "expenses", force: :cascade do |t|
     t.boolean "calculating_target_flag", comment: "計算対象"
-    t.date "expense_date", comment: "日付"
+    t.date "transaction_date", comment: "日付"
     t.string "content", comment: "内容"
     t.integer "price", comment: "金額（円）"
     t.integer "owned_financial_facility", comment: "保有金融機関"
@@ -42,7 +42,7 @@ ActiveRecord::Schema.define(version: 2021_01_10_102126) do
 
   create_table "incomes", force: :cascade do |t|
     t.boolean "calculating_target_flag", comment: "計算対象"
-    t.date "income_date", comment: "日付"
+    t.date "transaction_date", comment: "日付"
     t.string "content", comment: "内容"
     t.integer "price", comment: "金額（円）"
     t.integer "owned_financial_facility", comment: "保有金融機関"

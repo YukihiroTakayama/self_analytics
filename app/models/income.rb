@@ -1,8 +1,12 @@
 class Income < ApplicationRecord
   self.primary_key = 'moneyforward_id'
 
-  # has_one :large_category
-  # has_one :medium_category
+  belongs_to :large_category, class_name: 'Category', foreign_key: 'large_category_id'
+  belongs_to :medium_category, class_name: 'Category', foreign_key: 'medium_category_id'
+  belongs_to :period
+
+  delegate :name, to: :large_category, prefix: true
+  delegate :name, to: :medium_category, prefix: true
 
   scope :calculating_target, -> { where(calculating_target_flag: true) }
 
