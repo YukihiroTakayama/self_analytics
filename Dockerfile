@@ -23,6 +23,7 @@ COPY Gemfile /self_analytics/Gemfile
 COPY Gemfile.lock /self_analytics/Gemfile.lock
 RUN bundle install
 COPY . /self_analytics
+RUN rake webpacker:clobber && yarn --check-files && rake webpacker:compile
 
 # Add a script to be executed every time the container starts.
 COPY entrypoint.sh /usr/bin/
