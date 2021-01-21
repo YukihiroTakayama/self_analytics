@@ -1,5 +1,5 @@
 {
-  "name": "Rank-King",
+  "name": "self-analytics",
   "version": "0.1.0",
   "private": true,
   "scripts": {
@@ -13,11 +13,13 @@
     "@rails/activestorage": "^6.0.0",
     "@rails/ujs": "^6.0.0",
     "@rails/webpacker": "5.2.1",
+    "axios": "^0.21.1",
     "bootstrap": "4.5.0",
     "bootstrap-vue": "^2.21.2",
     "chart.js": "2.9.3",
     "core-js": "3.6.5",
     "flatpickr": "4.6.3",
+    "moment": "^2.29.1",
     "nouislider": "14.6.0",
     "register-service-worker": "1.7.1",
     "turbolinks": "^5.2.0",
@@ -39,6 +41,7 @@
     "babel-eslint": "^10.1.0",
     "eslint": "^7.3.1",
     "eslint-plugin-vue": "^6.2.2",
+    "hard-source-webpack-plugin": "^0.13.1",
     "node-sass": "^4.14.1",
     "sass-loader": "^8.0.2",
     "vue-template-compiler": "^2.6.11",
