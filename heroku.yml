@@ -11,5 +11,3 @@ build:
     web: Dockerfile
   config:
     WORKDIR: self_analytics
-run:
-  web: bundle exec rails db:migrate db:seed && bundle exec puma -C config/puma.rb
