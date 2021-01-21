@@ -1,18 +1,36 @@
 <template>
-  <table class="table tablesorter" :class="tableClass">
+  <table
+    class="table tablesorter"
+    :class="tableClass"
+  >
     <thead :class="theadClasses">
       <tr>
-        <slot name="columns" :columns="columns">
-          <th v-for="column in columns" :key="column">{{ column }}</th>
+        <slot
+          name="columns"
+          :columns="columns"
+        >
+          <th
+            v-for="column in columns"
+            :key="column"
+          >
+            {{ column }}
+          </th>
         </slot>
       </tr>
     </thead>
     <tbody :class="tbodyClasses">
-      <tr v-for="(item, index) in data" :key="index">
-        <slot :row="item" :index="index">
+      <tr
+        v-for="(item, index) in data"
+        :key="index"
+      >
+        <slot
+          :row="item"
+          :index="index"
+        >
           <td
             v-for="(column, index) in colsWithValue(item)"
-            :key="index">
+            :key="index"
+          >
             {{ itemValue(item, column) }}
           </td>
         </slot>
@@ -22,7 +40,7 @@
 </template>
 <script>
 export default {
-  name: 'base-table',
+  name: 'BaseTable',
   props: {
     columns: {
       type: Array,
@@ -56,8 +74,8 @@ export default {
     },
     colsWithValue() {
       return (row) => {
-        return this.columns.filter(column => this.hasValue(row, column))
-      }
+        return this.columns.filter(column => this.hasValue(row, column));
+      };
     }
   },
   methods: {

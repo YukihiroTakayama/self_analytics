@@ -1,4 +1,4 @@
-import { parseOptions } from "./optionHelpers";
+import { parseOptions } from './optionHelpers';
 
 export const Charts = {
   mode: 'light',//(themeMode) ? themeMode : 'light';
@@ -121,7 +121,7 @@ function chartOptions(Chart) {
       padding: 10,
       callback: function (value) {
         if (!(value % 10)) {
-          return value
+          return value;
         }
       }
     }

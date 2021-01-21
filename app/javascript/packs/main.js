@@ -15,16 +15,16 @@
 * The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
 
 */
-import Vue from 'vue'
-import App from '../app.vue'
-import router from '../router'
-import '../registerServiceWorker'
-import ArgonDashboard from '../plugins/argon-dashboard'
+import Vue from 'vue';
+import App from '../app.vue';
+import router from '../router';
+import '../registerServiceWorker';
+import ArgonDashboard from '../plugins/argon-dashboard';
 
-Vue.config.productionTip = false
-Vue.use(ArgonDashboard)
+Vue.config.productionTip = false;
+Vue.use(ArgonDashboard);
 
-document.addEventListener("DOMContentLoaded", () => {
+document.addEventListener('DOMContentLoaded', () => {
   const app = new Vue({
     router,
     render: h => h(App)

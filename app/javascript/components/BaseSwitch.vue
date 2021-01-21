@@ -1,21 +1,23 @@
 <template>
-    <label class="custom-toggle">
-        <input type="checkbox"
-               v-model="model"
-               v-bind="$attrs"
-               v-on="$listeners">
-        <span class="custom-toggle-slider rounded-circle"></span>
-    </label>
+  <label class="custom-toggle">
+    <input
+      v-model="model"
+      type="checkbox"
+      v-bind="$attrs"
+      v-on="$listeners"
+    >
+    <span class="custom-toggle-slider rounded-circle" />
+  </label>
 </template>
 <script>
 export default {
-  name: "base-switch",
+  name: 'BaseSwitch',
   inheritAttrs: false,
   props: {
     value: {
       type: Boolean,
       default: false,
-      description: "Switch value"
+      description: 'Switch value'
     }
   },
   computed: {
@@ -24,7 +26,7 @@ export default {
         return this.value;
       },
       set(value) {
-        this.$emit("input", value);
+        this.$emit('input', value);
       }
     }
   }

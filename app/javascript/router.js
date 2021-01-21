@@ -1,8 +1,8 @@
-import Vue from 'vue'
-import Router from 'vue-router'
-import DashboardLayout from './layout/DashboardLayout'
-import AuthLayout from './layout/AuthLayout'
-Vue.use(Router)
+import Vue from 'vue';
+import Router from 'vue-router';
+import DashboardLayout from './layout/DashboardLayout';
+import AuthLayout from './layout/AuthLayout';
+Vue.use(Router);
 
 export default new Router({
   linkExactActiveClass: 'active',
@@ -60,4 +60,4 @@ export default new Router({
       ]
     }
   ]
-})
+});

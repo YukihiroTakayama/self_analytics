@@ -1,0 +1,10 @@
+{
+  "environments": {
+    "test": {
+      "scripts": {
+        "rspec": "bundle exec rspec",
+        "rubocop": "bundle exec rubocop"
+      }
+    }
+  }
+}

@@ -1,5 +1,5 @@
 import { Line, mixins } from 'vue-chartjs';
-import globalOptionsMixin from "./globalOptionsMixin";
+import globalOptionsMixin from './globalOptionsMixin';
 
 export default {
   name: 'line-chart',
