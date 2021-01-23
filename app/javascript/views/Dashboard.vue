@@ -3,7 +3,7 @@
         <base-header type="gradient-success" class="pb-6 pb-8 pt-5 pt-md-8">
             <!-- Card stats -->
             <div class="row">
-                <div class="col-xl-3 col-lg-6">
+                <div class="col-xl-3 col-lg-3">
                     <stats-card title="balance"
                                 type="gradient-red"
                                 :sub-title="balance | yen"
@@ -17,7 +17,7 @@
                         </template>
                     </stats-card>
                 </div>
-                <div class="col-xl-3 col-lg-6">
+                <div class="col-xl-3 col-lg-3">
                     <stats-card title="income"
                                 type="gradient-orange"
                                 :sub-title="total_income | yen"
@@ -31,7 +31,7 @@
                         </template>
                     </stats-card>
                 </div>
-                <div class="col-xl-3 col-lg-6">
+                <div class="col-xl-3 col-lg-3">
                     <stats-card title="expense"
                                 type="gradient-green"
                                 :sub-title="total_expense | yen"
@@ -46,7 +46,7 @@
                     </stats-card>
 
                 </div>
-                <div class="col-xl-3 col-lg-6">
+                <div class="col-xl-3 col-lg-3">
                     <stats-card title="Performance"
                                 type="gradient-info"
                                 :sub-title="amount | yen"
