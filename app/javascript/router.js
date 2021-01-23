@@ -21,6 +21,11 @@ export default new Router({
           component: () => import(/* webpackChunkName: "demo" */ './views/Dashboard.vue')
         },
         {
+          path: '/categories',
+          name: 'categories',
+          component: () => import(/* webpackChunkName: "demo" */ './views/Categories.vue')
+        },
+        {
           path: '/icons',
           name: 'icons',
           component: () => import(/* webpackChunkName: "demo" */ './views/Icons.vue')

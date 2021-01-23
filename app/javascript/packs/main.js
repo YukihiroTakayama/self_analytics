@@ -15,21 +15,26 @@
 * The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
 
 */
-import Vue from 'vue';
-import App from '../app.vue';
-import router from '../router';
-import '../registerServiceWorker';
-import ArgonDashboard from '../plugins/argon-dashboard';
+import Vue from 'vue'
+import App from '../app.vue'
+import router from '../router'
+import '../registerServiceWorker'
+import ArgonDashboard from '../plugins/argon-dashboard'
+import Vuetify from "vuetify"
+import "vuetify/dist/vuetify.min.css"
 
-Vue.config.productionTip = false;
-Vue.use(ArgonDashboard);
+Vue.config.productionTip = false
+Vue.use(ArgonDashboard)
+Vue.use(Vuetify)
+const vuetify = new Vuetify()
 
-document.addEventListener('DOMContentLoaded', () => {
-    const app = new Vue({
-        router,
-        render: h => h(App)
-    }).$mount();
-    document.body.appendChild(app.$el);
+document.addEventListener("DOMContentLoaded", () => {
+  const app = new Vue({
+    router,
+    vuetify,
+    render: h => h(App)
+  }).$mount();
+  document.body.appendChild(app.$el);
 
-    console.log(app);
+  console.log(app);
 });
