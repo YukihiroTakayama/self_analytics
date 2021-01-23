@@ -25,11 +25,11 @@ Vue.config.productionTip = false;
 Vue.use(ArgonDashboard);
 
 document.addEventListener('DOMContentLoaded', () => {
-  const app = new Vue({
-    router,
-    render: h => h(App)
-  }).$mount();
-  document.body.appendChild(app.$el);
+    const app = new Vue({
+        router,
+        render: h => h(App)
+    }).$mount();
+    document.body.appendChild(app.$el);
 
-  console.log(app);
+    console.log(app);
 });
