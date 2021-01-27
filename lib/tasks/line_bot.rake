@@ -20,10 +20,10 @@ namespace :line_bot do
       type: 'text',
       text: text
     }
-    client = Line::Bot::Client.new { |config|
-      config.channel_secret = ENV["LINE_CHANNEL_SECRET"] || 'cc02e93034a0019a0b4850b688122d81'
-      config.channel_token = ENV["LINE_CHANNEL_TOKEN"] || 'Aa5202kUrOjTWmvkEseRgHwnaZk93kZSvhMJTiUgabnbfCUPUerkmEih0wzLnc9sDpuzHSWnjm4Iy98B4Ki9gpvbyHOYDrcccD/ozKEu5weXLFLbva3kNuVSOwxTI5OUwUyaU8Dvk6iwEGYB3+U/rAdB04t89/1O/w1cDnyilFU='
-    }
-    response = client.push_message(ENV["LINE_USER_ID"] || 'Uab2824ccb18f39401a58c28fd317f1e6', message)
+    client = Line::Bot::Client.new do |config|
+      config.channel_secret = ENV['LINE_CHANNEL_SECRET'] || 'cc02e93034a0019a0b4850b688122d81'
+      config.channel_token = ENV['LINE_CHANNEL_TOKEN'] || 'Aa5202kUrOjTWmvkEseRgHwnaZk93kZSvhMJTiUgabnbfCUPUerkmEih0wzLnc9sDpuzHSWnjm4Iy98B4Ki9gpvbyHOYDrcccD/ozKEu5weXLFLbva3kNuVSOwxTI5OUwUyaU8Dvk6iwEGYB3+U/rAdB04t89/1O/w1cDnyilFU='
+    end
+    response = client.push_message(ENV['LINE_USER_ID'] || 'Uab2824ccb18f39401a58c28fd317f1e6', message)
   end
 end
