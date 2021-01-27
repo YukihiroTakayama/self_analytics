@@ -9,6 +9,11 @@ class Expense < ApplicationRecord
   delegate :name, to: :medium_category, prefix: true
 
   scope :calculating_target, -> { where(calculating_target_flag: true) }
+  scope :total_price, -> { calculating_target.sum(:price) }
+  scope :period, lambda { |year, month|
+    joins(:period).where(periods: { year: year })
+                  .where(periods: { month: month })
+  }
 
   class << self
     def import!(file, period_id)

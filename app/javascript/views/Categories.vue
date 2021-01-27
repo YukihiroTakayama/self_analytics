@@ -40,21 +40,22 @@
         <div class="container-fluid mt--7">
             <div class="row">
                 <div v-for="(category, index) in categories" class="col-xl-3 col-lg-3">
-                    <stats-card :title="category.name" type="gradient-info" :sub-title="category.name" class="mb-4 mb-xl-0">
-                        <template slot="icon">
-                          <div class="icon icon-shape text-white rounded-circle shadow btn"
-                               :style="`background-color: ${category.color};`"
-                               @click="dialogOpen(index)"
-                               >
-                          </div>
-                        </template>
-                        <template slot="footer">
-                            <span class="text-success mr-2"><i class="fa fa-arrow-up"></i> 54.8%</span>
-                            <span class="text-nowrap">Since last month</span>
-                        </template>
-                    </stats-card>
-                    <div class="text-center" data-app>
-                        <v-dialog v-model="category.dialog" width="300">
+                    <a @click="dialogOpen(index)">
+                        <stats-card :title="category.name" type="gradient-info" :sub-title="category.expense_price | yen" class="mb-4 mb-xl-0 btn">
+                            <template slot="icon">
+                              <div class="icon icon-shape text-white rounded-circle shadow btn"
+                                   :style="`background-color: ${category.color};`">
+                              </div>
+                            </template>
+                            <template slot="footer">
+                                <span class="text-success mr-2"><i class="fa fa-arrow-up"></i> {{ `${category.use_rate}%` }}</span>
+                                <span class="text-nowrap">Since last month</span>
+                            </template>
+                        </stats-card>
+                    </a>
+                    <category-dialog :category="category"></category-dialog>
+                    <!-- <div class="text-center" data-app>
+                        <v-dialog persistent v-model="category.dialog">
                             <v-card>
                                 <v-card-title class="headline grey lighten-2">
                                     Privacy Policy
@@ -75,7 +76,7 @@
                                 </v-card-actions>
                             </v-card>
                         </v-dialog>
-                    </div>
+                    </div> -->
                 </div>
             </div>
         </div>
@@ -83,11 +84,14 @@
 </template>
 
 <script>
+import CategoryDialog from '../components/CategoryDialog';
 import axios from 'axios';
 import moment from "moment";
 
 export default {
-    components: {},
+    components: {
+        CategoryDialog
+    },
     data() {
         return {
             categories: [],
@@ -105,18 +109,27 @@ export default {
         dialogOpen(index) {
             this.categories[index].dialog = true
         },
-        updateColor(index) {
-            let category = this.categories[index]
-            axios
-                .patch('/api/v1/categories/' + category.id, {
-                    color: category.color
-                })
-            category.dialog = false
-        }
     },
     mounted() {
         this.setCategories();
     },
+    filters: {
+      month: function (date) {
+        return moment(date).format('M月');
+      },
+      year: function (date) {
+        return moment(date).format('YYYY年');
+      },
+      yen: function (number) {
+        return number.toLocaleString() + '円'
+      }
+    }
 };
 </script>
-<style></style>
+<style>
+  .btn {
+    text-align: initial;
+    vertical-align: initial;
+    padding: initial;
+  }
+</style>

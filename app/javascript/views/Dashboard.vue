@@ -136,9 +136,7 @@
                                 ref="bigChart"
                                 :chart-data="lineChart.chartData"
                                 :extra-options="lineChart.extraOptions"
-                        >
-                        </line-chart>
-
+                        ></line-chart>
                     </card>
                 </div>
 
@@ -155,16 +153,7 @@
                           :height="350"
                           ref="pieChart"
                           :chart-data="pieChart.chartData"
-                          :extra-options="pieChart.extraOptions"
-                        >
-                        </pie-chart>
-
-                        <!-- <bar-chart
-                                :height="350"
-                                ref="barChart"
-                                :chart-data="redBarChart.chartData"
-                        >
-                        </bar-chart> -->
+                        ></pie-chart>
                     </card>
                 </div>
             </div>
@@ -173,14 +162,14 @@
             <!--Tables-->
             <div class="row mt-5">
                 <div class="col-xl-8 mb-5 mb-xl-0">
-                    <page-visits-table
+                    <transaction-list-table
                       :table-data="tableData"
                       :columns="columns"
                     >
-                    </page-visits-table>
+                    </transaction-list-table>
                 </div>
                 <div class="col-xl-4">
-                    <social-traffic-table></social-traffic-table>
+                    <category-traffic-table></category-traffic-table>
                 </div>
             </div>
             <!--End tables-->
@@ -192,12 +181,11 @@
   // Charts
   import * as chartConfigs from '../components/Charts/config';
   import LineChart from '../components/Charts/LineChart';
-  import BarChart from '../components/Charts/BarChart';
-  import PieChart from '../components/Charts/PieChart.js'
+  import PieChart from '../components/Charts/PieChart'
 
   // Tables
-  import SocialTrafficTable from './Dashboard/SocialTrafficTable';
-  import PageVisitsTable from './Dashboard/PageVisitsTable';
+  import CategoryTrafficTable from './Dashboard/CategoryTrafficTable';
+  import TransactionListTable from './Dashboard/TransactionListTable';
 
   import axios from 'axios';
   import moment from "moment";
@@ -205,10 +193,9 @@
   export default {
     components: {
       LineChart,
-      BarChart,
       PieChart,
-      PageVisitsTable,
-      SocialTrafficTable,
+      TransactionListTable,
+      CategoryTrafficTable,
     },
     data() {
       return {
@@ -303,9 +290,9 @@
       },
       yen: function (number) {
         if (Math.sign(number) === 1) {
-          return '+' + number.toLocaleString()
+          return '+' + number.toLocaleString() + '円'
         } else {
-          return number.toLocaleString()
+          return number.toLocaleString() + '円'
         }
       }
     }
