@@ -1,5 +1,5 @@
 namespace :moneyforward do
-  task :import => :environment do
+  task import: :environment do
     require 'csv'
     require 'selenium-webdriver'
     require 'webdriver-user-agent'
@@ -9,11 +9,11 @@ namespace :moneyforward do
     download_path = File.absolute_path('./csv')
 
     download_preference = {
-      'prompt_for_download'=> false,
-      'default_directory'=>   download_path,
-      'directory_upgrade'=>   true
+      'prompt_for_download' => false,
+      'default_directory' => download_path,
+      'directory_upgrade' => true
     }
-    Selenium::WebDriver.logger.output = File.join("./log/", "selenium.log")
+    Selenium::WebDriver.logger.output = File.join('./log/', 'selenium.log')
     Selenium::WebDriver.logger.level = :warn
     options = Selenium::WebDriver::Chrome::Options.new
     options.add_preference(:download, download_preference)
@@ -44,14 +44,14 @@ namespace :moneyforward do
       FileUtils.rm_rf('csv')
       driver.get("https://moneyforward.com/cf/csv?month=#{current_month}&year=#{current_year}")
 
-      Dir.chdir("csv")
+      Dir.chdir('csv')
       is_download = false
-      until is_download do
-        download_incomplete_files = Dir.glob("*.crdownload")
+      until is_download
+        download_incomplete_files = Dir.glob('*.crdownload')
         is_download = download_incomplete_files.blank?
       end
 
-      csv_files = Dir.glob("*.csv")
+      csv_files = Dir.glob('*.csv')
       csv_files.each do |filename|
         file = File.open(filename, 'r')
         filename = filename.split('_')
@@ -64,7 +64,7 @@ namespace :moneyforward do
         Expense.import!(file, period.id)
         Income.import!(file, period.id)
       end
-      Dir.chdir("..")
+      Dir.chdir('..')
       FileUtils.rm_rf('csv')
     rescue Selenium::WebDriver::Error::NoSuchElementError
       p 'no such element error!!'

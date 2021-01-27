@@ -7,9 +7,9 @@ TIMOUT = 10
 download_path = File.absolute_path('./csv')
 
 download_preference = {
-  'prompt_for_download'=> false,
-  'default_directory'=>   download_path,
-  'directory_upgrade'=>   true
+  'prompt_for_download' => false,
+  'default_directory' => download_path,
+  'directory_upgrade' => true
 }
 options = Selenium::WebDriver::Chrome::Options.new
 options.add_preference(:download, download_preference)
@@ -41,14 +41,14 @@ begin
     end
   end
 
-  Dir.chdir("csv")
+  Dir.chdir('csv')
   is_download = false
-  until is_download do
-    download_incomplete_files = Dir.glob("*.crdownload")
+  until is_download
+    download_incomplete_files = Dir.glob('*.crdownload')
     is_download = download_incomplete_files.blank?
   end
 
-  csv_files = Dir.glob("*.csv")
+  csv_files = Dir.glob('*.csv')
   csv_files.each do |filename|
     file = File.open(filename, 'r')
     filename = filename.split('_')
@@ -61,7 +61,7 @@ begin
     Expense.import!(file, period.id)
     Income.import!(file, period.id)
   end
-  Dir.chdir("..")
+  Dir.chdir('..')
   FileUtils.rm_rf('csv')
 rescue Selenium::WebDriver::Error::NoSuchElementError
   p 'no such element error!!'
