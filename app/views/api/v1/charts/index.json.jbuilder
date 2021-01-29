@@ -4,8 +4,8 @@ json.set! :line_chart do
 end
 json.set! :pie_chart_data, @pie_chart_data
 json.set! :years, @years
-json.set! :year, params[:year]
-json.set! :month, params[:month]
+json.set! :year, @target_period.year
+json.set! :month, @target_period.month
 json.set! :total_expense, @target_period.total_expense
 json.set! :total_income, @target_period.total_income
 json.set! :balance, @target_period.balance

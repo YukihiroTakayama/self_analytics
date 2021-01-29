@@ -220,7 +220,6 @@
           },
           extraOptions: chartConfigs.pieChartOptions
         },
-        current_month: new Date(),
         balance: 0,
         total_income: 0,
         total_expense: 0,
@@ -232,20 +231,21 @@
           { key: 'medium_category_name', name: '中項目' },
           { key: 'price', name: '金額' },
         ],
-        amount: 0
+        amount: 0,
+        year: 0,
+        month: 0,
+        current_month: new Date,
+        years: [],
       };
     },
     methods: {
       setChart(index) {
-        let year = this.current_month.getFullYear()
-        let month = this.current_month.getMonth() + 1
-
         axios
           .get('/api/v1/charts', {
             params: {
               x_axis: index,
-              year: year,
-              month: month
+              year: this.year,
+              month: this.month
             }
           })
           .then(response => {
@@ -253,29 +253,40 @@
             this.lineChart.chartData = data.line_chart;
             this.pieChart.chartData = data.pie_chart_data
             this.lineChart.activeIndex = index;
-            this.current_month = new Date(data.year, data.month - 1)
             this.balance = data.balance
             this.total_income = data.total_income
             this.total_expense = data.total_expense * -1
             this.tableData = data.transaction_list
             this.amount = data.amount
+            this.current_month = new Date(data.year, data.month - 1)
+            this.years = data.years
           })
       },
       nextYear() {
-        this.current_month.setYear(this.current_month.getFullYear() + 1);
-        this.setChart(this.lineChart.activeIndex)
+        if (this.year < 0) {
+          this.year += 1
+          this.setChart(this.lineChart.activeIndex)
+        }
       },
       prevYear() {
-        this.current_month.setYear(this.current_month.getFullYear() - 1);
-        this.setChart(this.lineChart.activeIndex)
+        if (this.year !== (this.years.length - 1) * -1) {
+          this.year -= 1
+          this.setChart(this.lineChart.activeIndex)
+        }
       },
       nextMonth() {
-        this.current_month.setMonth(this.current_month.getMonth() + 1);
-        this.setChart(this.lineChart.activeIndex)
+        let current_month = new Date
+        let isCurrentMonth = this.current_month.getMonth() === current_month.month + 1 && this.current_month.getYear() === current_month.year
+        if (this.current_month.getMonth() !== 11 && !isCurrentMonth)  {
+          this.month += 1
+          this.setChart(this.lineChart.activeIndex)
+        }
       },
       prevMonth() {
-        this.current_month.setMonth(this.current_month.getMonth() - 1);
-        this.setChart(this.lineChart.activeIndex)
+        if (this.current_month.getMonth() !== 0) {
+          this.month -= 1
+          this.setChart(this.lineChart.activeIndex)
+        }
       }
     },
     mounted() {
