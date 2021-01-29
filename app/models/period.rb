@@ -4,6 +4,7 @@ class Period < ApplicationRecord
 
   scope :maximum_price, -> { includes(:incomes).maximum('incomes.price') }
   scope :minimum_price, -> { includes(:expenses).maximum('expenses.price') }
+  scope :target_period, ->(date) { find_by('beginning_date < ? AND end_date > ?', date, date) }
 
   def total_expense
     expenses.calculating_target.sum(:price)
