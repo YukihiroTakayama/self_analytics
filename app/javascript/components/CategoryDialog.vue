@@ -33,6 +33,7 @@
                   dot-size="25"
                   swatches-max-height="200"
                   hide-inputs
+                  width="250"
                 ></v-color-picker>
               </v-col>
               <v-col
@@ -104,6 +105,49 @@
                 md="1"
               ><div class="v-text-field">円</div>
               </v-col>
+              <v-col
+                cols="12"
+                sm="6"
+                md="4"
+              ><div class="v-text-field">警告値</div>
+              </v-col>
+              <v-col
+                cols="12"
+                sm="6"
+                md="7"
+              >
+                <v-slider
+                  v-model="category.warning_percent"
+                  step="10"
+                  :max="100"
+                  :min="0"
+                  hide-details
+                  style="padding-top: 12px; margin-top: 4px;"
+                >
+                  <template v-slot:append>
+                    <v-text-field
+                      v-model="category.warning_percent"
+                      class="mt-0 pt-0 centered-input"
+                      hide-details
+                      single-line
+                      type="number"
+                      style="width: 60px;"
+                    ></v-text-field>
+                  </template>
+                </v-slider>
+                <!-- <v-slider
+                  v-model="category.warning_percent"
+                  step="10"
+                  thumb-label="always"
+                  ticks
+                ></v-slider> -->
+              </v-col>
+              <v-col
+                cols="12"
+                sm="6"
+                md="1"
+              ><div class="v-text-field">%</div>
+              </v-col>
             </v-row>
           </v-container>
         </v-card-text>
@@ -158,7 +202,8 @@
             category: {
               color: this.category.color,
               budget_attributes: {
-                price: this.category.budget
+                price: this.category.budget,
+                warning_percent: this.category.warning_percent
               }
             }
           })

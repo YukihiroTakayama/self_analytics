@@ -11,6 +11,37 @@ class Category < ApplicationRecord
   enum type: { expense: 1, income: 2 }
 
   delegate :price, to: :budget, prefix: true, allow_nil: true
+  delegate :warning_percent, to: :budget, prefix: true, allow_nil: true
+
+  class << self
+    def budget_price_excess_categories(target_date = Date.today)
+      period_id = Period.target_period(target_date)&.id
+      return [] if period_id.nil?
+
+      target_expenses = Expense.calculating_target.where(period_id: period_id).group(:large_category_id).sum(:price)
+      target_categories = large.includes(:budget).where(budgets: { period_id: period_id }).to_a
+      target_categories.map! do |category|
+        category if (category.budget_price || 0) < (target_expenses[category.id] || 0)
+      end
+      target_categories.compact
+    end
+
+    def budget_warning_percent_excess_categories(target_date = Date.today)
+      period_id = Period.target_period(target_date)&.id
+      return [] if period_id.nil?
+
+      target_expenses = Expense.calculating_target.where(period_id: period_id).group(:large_category_id).sum(:price)
+      target_categories = large.includes(:budget).where(budgets: { period_id: period_id }).to_a
+      target_categories.map! do |category|
+        next if category.budget_price.nil? || category.budget_price.zero?
+        next if (category.budget_price || 0) < (target_expenses[category.id] || 0)
+
+        current_percent = par(target_expenses[category.id] || 0) / (category.budget_price).floor(1)
+        category if category.budget_warning_percent <= current_percent
+      end
+      target_categories.compact
+    end
+  end
 
   def pie_chart_data(year = Time.now.year, month = Time.now.month)
     period = Period.find_by(year: year, month: month)
