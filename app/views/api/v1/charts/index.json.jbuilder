@@ -11,7 +11,7 @@ json.set! :total_income, @target_period.total_income
 json.set! :balance, @target_period.balance
 json.set! :amount, @amount
 json.set! :transaction_list do
-  json.array! @target_period.transaction_list do |transaction|
+  json.array! @target_period.transaction_list(:desc) do |transaction|
     json.extract! transaction, :transaction_date, :content, :large_category_name, :price, :medium_category_name
   end
 end
