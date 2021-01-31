@@ -19,8 +19,8 @@ class Period < ApplicationRecord
   end
 
   def transaction_list(order = :asc, limit = 5)
-    expenses = self.expenses.order(transaction_date: order.to_sym).limit(limit).to_a
-    incomes = self.incomes.order(transaction_date: order.to_sym).limit(limit).to_a
+    expenses = self.expenses.calculating_target.order(created_at: order.to_sym, transaction_date: order.to_sym).limit(limit).to_a
+    incomes = self.incomes.calculating_target.order(created_at: order.to_sym, transaction_date: order.to_sym).limit(limit).to_a
 
     balance = expenses + incomes
     balance.sort_by! { |b| b.transaction_date }
