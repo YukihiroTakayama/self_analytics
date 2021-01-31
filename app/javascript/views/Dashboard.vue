@@ -10,7 +10,6 @@
                                 icon="ni ni-active-40"
                                 class="mb-4 mb-xl-0"
                     >
-
                         <template slot="footer">
                             <span class="text-success mr-2"><i class="fa fa-arrow-up"></i> 3.48%</span>
                             <span class="text-nowrap">Since last month</span>
@@ -276,7 +275,7 @@
       },
       nextMonth() {
         let current_month = new Date
-        let isCurrentMonth = this.current_month.getMonth() === current_month.month + 1 && this.current_month.getYear() === current_month.year
+        let isCurrentMonth = this.current_month.getMonth() === current_month.getMonth() + 1 && this.current_month.getYear() === current_month.getYear()
         if (this.current_month.getMonth() !== 11 && !isCurrentMonth)  {
           this.month += 1
           this.setChart(this.lineChart.activeIndex)

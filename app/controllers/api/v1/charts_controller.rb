@@ -41,7 +41,7 @@ class Api::V1::ChartsController < ApiController
         {
           type: 'bar',
           label: '支出',
-          data: data_list[0].map.with_index { |price, i| i == 0 ? price : (price - data_list[0][i - 1]) },
+          data: data_list[0].map.with_index { |price, i| (i == 0 ? price : (price - data_list[0][i - 1]))* -1 },
           lineTension: 0,
           backgroundColor: '#FF0000'
         }

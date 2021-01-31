@@ -135,12 +135,6 @@
                     ></v-text-field>
                   </template>
                 </v-slider>
-                <!-- <v-slider
-                  v-model="category.warning_percent"
-                  step="10"
-                  thumb-label="always"
-                  ticks
-                ></v-slider> -->
               </v-col>
               <v-col
                 cols="12"
