@@ -24,9 +24,9 @@ wait = Selenium::WebDriver::Wait.new(timeout: TIMOUT)
 
 begin
   driver.get('https://id.moneyforward.com/sign_in/email?client_id=2WND7CAYV1NsJDBzk13JRtjuk5g9Jtz-4gkAoVzuS_k&nonce=b0cb75eb0351729cd986cfcd1b8dc299&redirect_uri=https%3A%2F%2Fmoneyforward.com%2Fauth%2Fmfid%2Fcallback&response_type=code&scope=openid+email+profile+address&state=c5d7e1f6373ce5adb9e9ceb5dd8dad31')
-  driver.find_element(:class, 'inputItem').send_keys('takayamayukihiro@gmail.com')
+  driver.find_element(:class, 'inputItem').send_keys(Rails.application.credentials.moneyforward[:email])
   driver.find_element(:class, 'submitBtn').click
-  driver.find_element(:class, 'inputItem').send_keys('gatpvbn9')
+  driver.find_element(:class, 'inputItem').send_keys(Rails.application.credentials.moneyforward[:password])
   driver.find_element(:class, 'submitBtn').click
   driver.get('https://moneyforward.com/')
   driver.find_element(:class, 'web-sign-in').click

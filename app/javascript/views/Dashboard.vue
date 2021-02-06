@@ -46,7 +46,7 @@
 
                 </div>
                 <div class="col-xl-3 col-lg-3">
-                    <stats-card title="Performance"
+                    <stats-card title="brought forward"
                                 type="gradient-info"
                                 :sub-title="amount | yen"
                                 icon="ni ni-chart-bar-32"
@@ -69,8 +69,7 @@
                     <card type="default" header-classes="bg-transparent">
                         <div slot="header" class="row align-items-center">
                             <div class="col-xl-3">
-                                <h6 class="text-light text-uppercase ls-1 mb-1">Overview</h6>
-                                <h5 class="h3 text-white mb-0">Sales value</h5>
+                                <h5 class="h3 text-white mb-0">Balance Chart</h5>
                             </div>
                             <div class="col">
                                 <ul class="nav nav-pills justify-content-end">
@@ -130,11 +129,19 @@
                                 </ul>
                             </div>
                         </div>
+                        <v-progress-circular
+                          v-if="lineChart.isLoading"
+                          :size="70"
+                          style="height: 350px; width: 877px;"
+                          indeterminate
+                          class="center"
+                        ></v-progress-circular>
                         <line-chart
-                                :height="350"
-                                ref="bigChart"
-                                :chart-data="lineChart.chartData"
-                                :extra-options="lineChart.extraOptions"
+                          v-else
+                          :height="350"
+                          ref="bigChart"
+                          :chart-data="lineChart.chartData"
+                          :extra-options="lineChart.extraOptions"
                         ></line-chart>
                     </card>
                 </div>
@@ -143,8 +150,7 @@
                     <card type="default" header-classes="bg-transparent">
                         <div slot="header" class="row align-items-center">
                             <div class="col">
-                                <h6 class="text-uppercase text-muted ls-1 mb-1">Performance</h6>
-                                <h5 class="h3 text-white mb-0">Total orders</h5>
+                                <h5 class="h3 text-white mb-0">Category Chart</h5>
                             </div>
                         </div>
 
@@ -162,13 +168,27 @@
             <div class="row mt-5">
                 <div class="col-xl-8 mb-5 mb-xl-0">
                     <transaction-list-table
-                      :table-data="tableData"
+                      :table-data="transactionPagination.tableData"
                       :columns="columns"
                     >
                     </transaction-list-table>
+                    <v-pagination
+                      v-model="transactionPagination.page"
+                      :length="transactionPagination.length"
+                      prev-icon="ni ni-bold-left"
+                      next-icon="ni ni-bold-right"
+                    ></v-pagination>
                 </div>
                 <div class="col-xl-4">
-                    <category-traffic-table></category-traffic-table>
+                    <category-traffic-table
+                      :table-data="categoryPagination.tableData"
+                    ></category-traffic-table>
+                    <v-pagination
+                      v-model="categoryPagination.page"
+                      :length="categoryPagination.length"
+                      prev-icon="ni ni-bold-left"
+                      next-icon="ni ni-bold-right"
+                    ></v-pagination>
                 </div>
             </div>
             <!--End tables-->
@@ -209,6 +229,7 @@
             labels: [],
           },
           extraOptions: chartConfigs.blueChartOptions,
+          isLoading: true
         },
         pieChart: {
           chartData: {
@@ -222,7 +243,18 @@
         balance: 0,
         total_income: 0,
         total_expense: 0,
+        transactionList: [],
         tableData: [],
+        transactionPagination: {
+          page: 0,
+          length: 0,
+          tableData: []
+        },
+        categoryPagination: {
+          page: 0,
+          length: 0,
+          tableData: []
+        },
         columns: [
           { key: 'transaction_date', name: '日付' },
           { key: 'content', name: '内容' },
@@ -235,6 +267,7 @@
         month: 0,
         current_month: new Date,
         years: [],
+        categories: [],
       };
     },
     methods: {
@@ -255,20 +288,28 @@
             this.balance = data.balance
             this.total_income = data.total_income
             this.total_expense = data.total_expense * -1
-            this.tableData = data.transaction_list
+            this.transactionList = data.transaction_list
             this.amount = data.amount
             this.current_month = new Date(data.year, data.month - 1)
             this.years = data.years
+            this.categories = data.categories
+            this.transactionPagination.length = parseInt(this.transactionList.length / 5, 10)
+            this.categoryPagination.length = parseInt(this.categories.length / 5, 10)
+            this.transactionPagination.page = 1
+            this.categoryPagination.page = 1
+            this.lineChart.isLoading = false
           })
       },
       nextYear() {
         if (this.year < 0) {
+          this.lineChart.isLoading = true
           this.year += 1
           this.setChart(this.lineChart.activeIndex)
         }
       },
       prevYear() {
         if (this.year !== (this.years.length - 1) * -1) {
+          this.lineChart.isLoading = true
           this.year -= 1
           this.setChart(this.lineChart.activeIndex)
         }
@@ -277,19 +318,32 @@
         let current_month = new Date
         let isCurrentMonth = this.current_month.getMonth() === current_month.getMonth() + 1 && this.current_month.getYear() === current_month.getYear()
         if (this.current_month.getMonth() !== 11 && !isCurrentMonth)  {
+          this.lineChart.isLoading = true
           this.month += 1
           this.setChart(this.lineChart.activeIndex)
         }
       },
       prevMonth() {
         if (this.current_month.getMonth() !== 0) {
+          this.lineChart.isLoading = true
           this.month -= 1
           this.setChart(this.lineChart.activeIndex)
         }
-      }
+      },
     },
     mounted() {
       this.setChart(0);
+    },
+    watch: {
+      'transactionPagination.page': function() {
+        let i = 4 * (this.transactionPagination.page - 1)
+        this.transactionPagination.tableData = this.transactionList.slice((0 + i), (5 + i))
+        console.log(true)
+      },
+      'categoryPagination.page': function() {
+        let i = 4 * (this.categoryPagination.page - 1)
+        this.categoryPagination.tableData = this.categories.slice((0 + i), (5 + i))
+      }
     },
     filters: {
       month: function (date) {

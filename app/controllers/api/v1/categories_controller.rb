@@ -8,8 +8,7 @@ class Api::V1::CategoriesController < ApplicationController
 
   def update
     @category = Category.find(params[:id])
-    Budget.create(category_id: params[:id]) if @category.budget.nil?
-    @category.update!(category_params)
+    @category.update(category_params)
   end
 
   def category_params

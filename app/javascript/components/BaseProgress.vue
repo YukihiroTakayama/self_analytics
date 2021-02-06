@@ -60,11 +60,8 @@
         description: "Progress type (e.g danger, primary etc)"
       },
       value: {
-        type: Number,
+        type: [Number, String],
         default: 0,
-        validator: value => {
-          return value >= 0 && value <= 100;
-        },
         description: "Progress value"
       }
     },

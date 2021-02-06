@@ -8,6 +8,9 @@ class Api::V1::ChartsController < ApiController
     @years = years
     @pie_chart_data = pie_chart_data
     @amount = amount
+    @categories = Category.where(type: 1)
+                          .where(size: params[:category_size] || Category.sizes[:large])
+                          .order(:id)
   end
 
   private
@@ -41,7 +44,7 @@ class Api::V1::ChartsController < ApiController
         {
           type: 'bar',
           label: '支出',
-          data: data_list[0].map.with_index { |price, i| (i == 0 ? price : (price - data_list[0][i - 1]))* -1 },
+          data: data_list[0].map.with_index { |price, i| (i == 0 ? price : (price - data_list[0][i - 1])) * -1 },
           lineTension: 0,
           backgroundColor: '#FF0000'
         }
@@ -63,6 +66,7 @@ class Api::V1::ChartsController < ApiController
   def categories
     Category.where(type: params[:type] || 1)
             .where(size: params[:category_size] || Category.sizes[:large])
+            .order(:id)
   end
 
   def aggregate_data
