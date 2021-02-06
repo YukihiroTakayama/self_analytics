@@ -48,35 +48,12 @@
                               </div>
                             </template>
                             <template slot="footer">
-                                <span class="text-success mr-2"><i class="fa fa-arrow-up"></i> {{ `${category.use_rate}%` }}</span>
+                                <span :class="`text-success mr-2 text-${UseRateStatus(category)}`"><i class="fa fa-arrow-up"></i>{{ `${category.use_rate}%` }}</span>
                                 <span class="text-nowrap">Since last month</span>
                             </template>
                         </stats-card>
                     </a>
                     <category-dialog :category="category"></category-dialog>
-                    <!-- <div class="text-center" data-app>
-                        <v-dialog persistent v-model="category.dialog">
-                            <v-card>
-                                <v-card-title class="headline grey lighten-2">
-                                    Privacy Policy
-                                </v-card-title>
-                                <v-color-picker
-                                    v-model="category.color"
-                                    dot-size="25"
-                                    swatches-max-height="200"
-                                ></v-color-picker>
-                                <v-card-actions>
-                                    <v-spacer></v-spacer>
-                                    <v-btn color="primary" text @click="category.dialog = false">
-                                        キャンセル
-                                    </v-btn>
-                                    <v-btn color="primary" text @click="updateColor(index)">
-                                        更新
-                                    </v-btn>
-                                </v-card-actions>
-                            </v-card>
-                        </v-dialog>
-                    </div> -->
                 </div>
             </div>
         </div>
@@ -109,6 +86,13 @@ export default {
         dialogOpen(index) {
             this.categories[index].dialog = true
         },
+        UseRateStatus(category) {
+            if (category.use_rate >= 100) {
+                return 'danger'
+            } else {
+                return 'success'
+            }
+        }
     },
     mounted() {
         this.setCategories();

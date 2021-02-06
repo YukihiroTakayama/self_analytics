@@ -3,10 +3,10 @@
     <div class="card-header border-0">
       <div class="row align-items-center">
         <div class="col">
-          <h3 class="mb-0">Social traffic</h3>
+          <h3 class="mb-0">Category Rate</h3>
         </div>
         <div class="col text-right">
-          <base-button size="sm" type="primary">See all</base-button>
+          <!-- <base-button size="sm" type="primary">See all</base-button> -->
         </div>
       </div>
     </div>
@@ -25,15 +25,14 @@
             {{row.name}}
           </th>
           <td>
-            {{row.visitors}}
+            {{ row.expenses_amount | yen }}
           </td>
           <td>
             <div class="d-flex align-items-center">
-              <span class="mr-2">{{row.progress}}%</span>
-              <base-progress :type="row.progressType"
-                             class="pt-0"
+              <span class="mr-2">{{row.use_rate}}%</span>
+              <base-progress class="pt-0"
                              :show-percentage="false"
-                             :value="row.progress"
+                             :value="Number(row.use_rate)"
               />
             </div>
           </td>
@@ -45,42 +44,24 @@
   </div>
 </template>
 <script>
+  import moment from "moment";
+
   export default {
-    name: 'category-traffic-table',
+    name: 'social-traffic-table',
     data() {
       return {
-        tableData: [
-          {
-            name: 'Facebook',
-            visitors: '1,480',
-            progress: 60,
-            progressType: 'gradient-danger',
-          },
-          {
-            name: 'LinkedIn',
-            visitors: '5,480',
-            progress: 70,
-            progressType: 'gradient-success',
-          },
-          {
-            name: 'Google',
-            visitors: '4,807',
-            progress: 80,
-            progressType: 'gradient-primary',
-          },
-          {
-            name: 'Instagram',
-            visitors: '3,678',
-            progress: 75,
-            progressType: 'gradient-info',
-          },
-          {
-            name: 'Twitter',
-            visitors: '2,645',
-            progress: 30,
-            progressType: 'gradient-warning',
-          }
-        ]
+      }
+    },
+    props: {
+      tableData: {
+        type: Array,
+        default: () => [],
+        description: 'Table data'
+      },
+    },
+    filters: {
+      yen: function (number) {
+        return number.toLocaleString() + '円'
       }
     }
 
