@@ -18,13 +18,19 @@ class Period < ApplicationRecord
     total_income - total_expense
   end
 
-  def transaction_list(order = :asc, limit = 5)
-    expenses = self.expenses.order(transaction_date: order.to_sym).limit(limit).to_a
-    incomes = self.incomes.order(transaction_date: order.to_sym).limit(limit).to_a
+  def transaction_list(order = :asc, limit = nil)
+    expenses = self.expenses.calculating_target.order(transaction_date: order.to_sym, created_at: order.to_sym).to_a
+    incomes = self.incomes.calculating_target.order(transaction_date: order.to_sym, created_at: order.to_sym).to_a
 
     balance = expenses + incomes
     balance.sort_by! { |b| b.transaction_date }
     balance.reverse! if order.to_sym == :desc
-    balance.take(limit)
+    balance.take!(limit) if limit.present?
+    balance
+  end
+
+  def self.next_month_initialize
+    next_month = Date.new(last.year, last.month).since(1.month)
+    new(year: next_month.year, month: next_month.month)
   end
 end

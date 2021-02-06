@@ -12,6 +12,29 @@
                 </base-input>
             </div>
         </form>
+        <div data-app>
+            <v-menu
+              data-app
+              transition="slide-x-transition"
+              bottom
+              right>
+              <template v-slot:activator="{ on, attrs }">
+                <v-icon
+                  v-bind="attrs"
+                  v-on="on"
+                >ni ni-bullet-list-67</v-icon>
+              </template>
+
+              <v-list>
+                <v-list-item
+                  v-for="(item, i) in items"
+                  :key="i"
+                >
+                  <router-link :to="{ name: item.name }">{{ item.name }}</router-link>
+                </v-list-item>
+              </v-list>
+            </v-menu>
+        </div>
         <!-- <ul class="navbar-nav align-items-center d-none d-md-flex">
             <li class="nav-item dropdown">
                 <base-dropdown class="nav-link pr-0">
@@ -61,7 +84,11 @@
       return {
         activeNotifications: false,
         showMenu: false,
-        searchQuery: ''
+        searchQuery: '',
+        items: [
+            { name: 'dashboard' },
+            { name: 'categories' },
+        ],
       };
     },
     methods: {

@@ -15,5 +15,10 @@ json.set! :transaction_list do
     json.extract! transaction, :transaction_date, :content, :large_category_name, :price, :medium_category_name
   end
 end
-# json.set! :maximum_price, @periods.maximum_price.present? ? @periods.maximum_price : 0
-# json.set! :minimum_price, @periods.minimum_price.present? ? @periods.minimum_price : 0
+json.set! :categories do
+  json.array! @categories do |category|
+    json.name category.name
+    json.expenses_amount @target_period.expenses.where(large_category_id: category.id).sum(:price)
+    json.use_rate category.use_rate
+  end
+end

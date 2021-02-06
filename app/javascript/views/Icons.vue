@@ -111,7 +111,7 @@
           { name: "ni ni-air-baloon" },
           { name: "ni ni-album-2" },
           { name: "ni ni-align-center" },
-          { name: "ni ni-align-left-2" },
+          { name: "ni ni-align-right" },
           { name: "ni ni-ambulance" },
           { name: "ni ni-app" },
           { name: "ni ni-archive-2" },
