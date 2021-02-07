@@ -1,4 +1,9 @@
 class Category < ApplicationRecord
+
+  R_COLOR_RANGE = [*0..255]
+  G_COLOR_RANGE = [*0..255]
+  B_COLOR_RANGE = [*0..255]
+
   self.inheritance_column = :_type_disabled
 
   has_many :expenses, foreign_key: 'large_category_id'
@@ -12,6 +17,8 @@ class Category < ApplicationRecord
 
   delegate :price, to: :budget, prefix: true, allow_nil: true
   delegate :warning_percent, to: :budget, prefix: true, allow_nil: true
+
+  after_initialize :random_color
 
   class << self
     def budget_price_excess_categories(target_date = Date.today)
@@ -59,11 +66,12 @@ class Category < ApplicationRecord
     }
   end
 
-  def use_rate(date = Date.today)
-    return 0 if budget_price.to_i.zero?
+  def random_color
+    return if self.color.present?
 
-    period_id = Period.target_period(date).id
-    target_expenses = expenses.where(period_id: period_id)
-    (target_expenses.total_price / budget_price.to_f).floor(2) * 100
+    r = R_COLOR_RANGE.sample
+    g = G_COLOR_RANGE.sample
+    b = B_COLOR_RANGE.sample
+    self.color = "##{"%02x"%r}#{"%02x"%g}#{"%02x"%b}"
   end
 end
