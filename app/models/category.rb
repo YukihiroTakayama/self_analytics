@@ -66,6 +66,14 @@ class Category < ApplicationRecord
     }
   end
 
+  def use_rate(date = Date.today)
+    return 0 if budget_price.to_i.zero?
+
+    period_id = Period.target_period(date).id
+    target_expenses = expenses.where(period_id: period_id)
+    (target_expenses.total_price / budget_price.to_f).floor(2) * 100
+  end
+
   def random_color
     return if self.color.present?
 
