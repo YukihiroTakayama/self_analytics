@@ -31,6 +31,7 @@ gem 'line-bot-api', require: false
 gem 'nokogiri', require: false
 gem 'selenium-webdriver', require: false
 gem 'webdriver-user-agent', require: false
+gem 'whenever', require: false
 
 group :development, :test do
   # Call 'byebug' anywhere in the code to stop execution and get a debugger console
