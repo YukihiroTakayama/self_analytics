@@ -8,10 +8,12 @@ services:
       - POSTGRES_PASSWORD=password
   web:
     build: .
-    command: bash -c "yarn install && rm -f tmp/pids/server.pid && bundle install && bundle exec rails s -p 3002 -b '0.0.0.0'"
+    command: bash -c "yarn install && rm -f tmp/pids/server.pid && bundle install && bundle exec rails s -b '0.0.0.0'"
     volumes:
       - .:/self_analytics
     ports:
-      - "3002:3002"
+      - "3000:3000"
     depends_on:
       - db
+    environment:
+      RAILS_ENV: $RAILS_ENV

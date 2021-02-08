@@ -26,7 +26,7 @@ ActiveRecord::Schema.define(version: 2021_01_30_004149) do
 
   create_table "categories", force: :cascade do |t|
     t.string "name"
-    t.string "color", default: "#000000", null: false
+    t.string "color"
     t.integer "size", default: 3, null: false
     t.integer "type", default: 1, null: false
     t.datetime "created_at", precision: 6, null: false
