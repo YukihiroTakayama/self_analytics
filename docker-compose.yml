@@ -6,14 +6,34 @@ services:
       - ./tmp/db:/var/lib/postgresql/data
     environment:
       - POSTGRES_PASSWORD=password
-  web:
-    build: .
-    command: bash -c "yarn install && rm -f tmp/pids/server.pid && bundle install && bundle exec rails s -b '0.0.0.0'"
+  app:
+    build:
+      context: .
+      dockerfile: appDockerfile
+    command: bash -c "yarn install && rm -f tmp/pids/server.pid && bundle install && bundle exec puma -C config/puma.rb"
     volumes:
       - .:/self_analytics
+      - public:/self_analytics/public
+      - tmp:/self_analytics/tmp
+      - log:/self_analytics/log
     ports:
       - "3000:3000"
     depends_on:
       - db
     environment:
       RAILS_ENV: $RAILS_ENV
+  web:
+    build:
+      context: .
+      dockerfile: webDockerfile
+    volumes:
+      - public:/self_analytics/public
+      - tmp:/self_analytics/tmp
+    ports:
+      - "80:80"
+    depends_on:
+      - app
+volumes:
+  public:
+  tmp:
+  log:
