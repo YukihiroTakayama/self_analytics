@@ -171,7 +171,7 @@
 
 <script>
   import axios from 'axios';
-  import PieChart from '../components/Charts/PieChart'
+  import PieChart from '../Charts/PieChart'
 
   export default {
     name: 'category-dialog',
@@ -202,8 +202,6 @@
             }
           })
           .then(response => {
-            // let data = response.data
-            // this.category = data.category
             this.dialogClose()
             this.$parent.setCategories()
           })

@@ -88,6 +88,7 @@
         items: [
             { name: 'dashboard' },
             { name: 'categories' },
+            { name: 'prediction' },
         ],
       };
     },

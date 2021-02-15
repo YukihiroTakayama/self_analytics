@@ -44,6 +44,10 @@ Style/RedundantArgument:
   Enabled: true
 Style/SwapValues:
   Enabled: true
+FormatString:
+  EnforcedStyle: percent
+Style/ClassAndModuleChildren:
+  Enabled: false
 
 AllCops:
   Exclude:

@@ -1,4 +1,4 @@
-require File.expand_path(File.dirname(__FILE__) + "/environment")
+require File.expand_path("#{File.dirname(__FILE__)}/environment")
 
 ENV.each { |k, v| env(k, v) }
 rails_env = ENV['RAILS_ENV'] || :development

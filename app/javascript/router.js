@@ -26,6 +26,11 @@ export default new Router({
           component: () => import(/* webpackChunkName: "demo" */ './views/Categories.vue')
         },
         {
+          path: '/prediction',
+          name: 'prediction',
+          component: () => import(/* webpackChunkName: "demo" */ './views/Prediction.vue')
+        },
+        {
           path: '/icons',
           name: 'icons',
           component: () => import(/* webpackChunkName: "demo" */ './views/Icons.vue')

@@ -1,8 +1,7 @@
 class Category < ApplicationRecord
-
-  R_COLOR_RANGE = [*0..255]
-  G_COLOR_RANGE = [*0..255]
-  B_COLOR_RANGE = [*0..255]
+  R_COLOR_RANGE = [*0..255].freeze
+  G_COLOR_RANGE = [*0..255].freeze
+  B_COLOR_RANGE = [*0..255].freeze
 
   self.inheritance_column = :_type_disabled
 
@@ -75,11 +74,11 @@ class Category < ApplicationRecord
   end
 
   def random_color
-    return if self.color.present?
+    return if color.present?
 
     r = R_COLOR_RANGE.sample
     g = G_COLOR_RANGE.sample
     b = B_COLOR_RANGE.sample
-    self.color = "##{"%02x"%r}#{"%02x"%g}#{"%02x"%b}"
+    self.color = "##{'%02x' % r}#{'%02x' % g}#{'%02x' % b}"
   end
 end

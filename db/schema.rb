@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_01_30_004149) do
+ActiveRecord::Schema.define(version: 2021_02_08_141116) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -49,6 +49,22 @@ ActiveRecord::Schema.define(version: 2021_01_30_004149) do
     t.integer "period_id"
   end
 
+  create_table "fixed_expenses", force: :cascade do |t|
+    t.boolean "calculating_target_flag", comment: "計算対象"
+    t.date "transaction_date", comment: "日付"
+    t.string "content", comment: "内容"
+    t.integer "price", comment: "金額（円）"
+    t.integer "owned_financial_facility", comment: "保有金融機関"
+    t.integer "large_category_id", comment: "大項目"
+    t.integer "medium_category_id", comment: "中項目"
+    t.string "memo", comment: "メモ"
+    t.boolean "transfer_flag", comment: "振替"
+    t.string "moneyforward_id", comment: "ID"
+    t.integer "period_id"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+  end
+
   create_table "incomes", force: :cascade do |t|
     t.boolean "calculating_target_flag", comment: "計算対象"
     t.date "transaction_date", comment: "日付"
@@ -77,6 +93,22 @@ ActiveRecord::Schema.define(version: 2021_01_30_004149) do
     t.date "end_date"
     t.integer "year"
     t.integer "month"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+  end
+
+  create_table "prediction_expenses", force: :cascade do |t|
+    t.boolean "calculating_target_flag", comment: "計算対象"
+    t.date "transaction_date", comment: "日付"
+    t.string "content", comment: "内容"
+    t.integer "price", comment: "金額（円）"
+    t.integer "owned_financial_facility", comment: "保有金融機関"
+    t.integer "large_category_id", comment: "大項目"
+    t.integer "medium_category_id", comment: "中項目"
+    t.string "memo", comment: "メモ"
+    t.boolean "transfer_flag", comment: "振替"
+    t.string "moneyforward_id", comment: "ID"
+    t.integer "period_id"
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
   end

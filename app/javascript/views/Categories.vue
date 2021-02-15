@@ -43,7 +43,7 @@
                     <a @click="dialogOpen(index)">
                         <stats-card :title="category.name" type="gradient-info" :sub-title="category.expense_price | yen" class="mb-4 mb-xl-0 btn">
                             <template slot="icon">
-                              <div class="icon icon-shape text-white rounded-circle shadow btn"
+                              <div class="icon icon-shape text-white rounded-circle"
                                    :style="`background-color: ${category.color};`">
                               </div>
                             </template>
@@ -61,7 +61,7 @@
 </template>
 
 <script>
-import CategoryDialog from '../components/CategoryDialog';
+import CategoryDialog from '../components/Dialog/CategoryDialog';
 import axios from 'axios';
 import moment from "moment";
 

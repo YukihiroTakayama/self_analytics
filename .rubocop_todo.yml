@@ -65,15 +65,6 @@ Metrics/MethodLength:
 Metrics/PerceivedComplexity:
   Max: 11
 
-# Offense count: 2
-# Cop supports --auto-correct.
-# Configuration parameters: EnforcedStyle.
-# SupportedStyles: nested, compact
-Style/ClassAndModuleChildren:
-  Exclude:
-    - 'app/controllers/api/v1/categories_controller.rb'
-    - 'app/controllers/api/v1/charts_controller.rb'
-
 # Offense count: 19
 Style/Documentation:
   Enabled: false

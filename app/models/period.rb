@@ -1,6 +1,7 @@
 class Period < ApplicationRecord
   has_many :expenses
   has_many :incomes
+  has_many :prediction_expenses
 
   scope :maximum_price, -> { includes(:incomes).maximum('incomes.price') }
   scope :minimum_price, -> { includes(:expenses).maximum('expenses.price') }
